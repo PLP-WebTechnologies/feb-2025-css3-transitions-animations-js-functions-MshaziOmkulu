@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CSS Animation + localStorage Demo</title>
+<style>
+  /* Insert the CSS above here */
+  /* Smooth color transition on hover */
+button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover changes background color smoothly */
+button:hover {
+  background-color: #357ABD;
+}
+
+/* Keyframe for shake animation */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+}
+
+/* Apply shake animation */
+.shake {
+  animation: shake 0.5s ease;
+}
+
+</style>
+</head>
+<body>
+  <button>Click me!</button>
+
+  <script>
+    // Insert the JavaScript above here
+    // Function to save preferred color to localStorage
+function saveColorPreference(color) {
+  localStorage.setItem('preferredButtonColor', color);
+  applyColorPreference();
+}
+
+// Function to apply color preference from localStorage
+function applyColorPreference() {
+  const color = localStorage.getItem('preferredButtonColor');
+  if (color) {
+    button.style.backgroundColor = color;
+  }
+}
+
+// Function to trigger shake animation on the button
+function triggerShakeAnimation() {
+  button.classList.add('shake');
+
+  // Remove class after animation ends to allow retriggering
+  button.addEventListener('animationend', () => {
+    button.classList.remove('shake');
+  }, { once: true });
+}
+
+// Reference to the button element
+const button = document.querySelector('button');
+
+// Apply saved color on page load
+applyColorPreference();
+
+// Trigger shake animation on click
+button.addEventListener('click', () => {
+  triggerShakeAnimation();
+
+  // Save a new random color preference on each click
+  const randomColor = `hsl(${Math.floor(Math.random() * 360)}, 70%, 60%)`;
+  saveColorPreference(randomColor);
+});
+
+
+
+  </script>
+</body>
+</html>
